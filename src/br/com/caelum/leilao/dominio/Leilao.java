@@ -34,7 +34,6 @@ public class Leilao {
 
 	private Usuario usuarioQueRealizouUltimoLance() {
 		return (lances.get(lances.size() - 1).getUsuario());
-
 	}
 
 	public String getDescricao() {

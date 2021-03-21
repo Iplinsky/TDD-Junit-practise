@@ -47,7 +47,7 @@ public class LeilaoTest {
 		leilaoTV.propoe(new Lance(thiago, 12000.0));
 
 		int ultimoLance = leilaoTV.getLances().size() - 1;
-		
+
 		assertEquals(10, leilaoTV.getLances().size());
 		assertEquals(11000.0, leilaoTV.getLances().get(ultimoLance).getValor(), 0.000001);
 	}
