@@ -19,8 +19,14 @@ public class Leilao {
 			lances.add(lance);
 	}
 
+	public void dobraLance(Usuario usuario) {
+		if (realizouNoMaximoCincoLances(usuario)) {
+			propoe(new Lance(usuario, recuperaUltimoLanceDado().getValor() * 2));
+		}
+	}
+
 	public boolean realizouNoMaximoCincoLances(Usuario usuario) {
-		return !usuarioQueRealizouUltimoLance().equals(usuario) && QuantidadeDeLancesDadoPorUsuario(usuario) < 5;
+		return !recuperaUltimoLanceDado().getUsuario().equals(usuario) && QuantidadeDeLancesDadoPorUsuario(usuario) < 5;
 	}
 
 	public int QuantidadeDeLancesDadoPorUsuario(Usuario usuario) {
@@ -32,8 +38,8 @@ public class Leilao {
 		return total;
 	}
 
-	private Usuario usuarioQueRealizouUltimoLance() {
-		return (lances.get(lances.size() - 1).getUsuario());
+	private Lance recuperaUltimoLanceDado() {
+		return (lances.get(lances.size() - 1));
 	}
 
 	public String getDescricao() {

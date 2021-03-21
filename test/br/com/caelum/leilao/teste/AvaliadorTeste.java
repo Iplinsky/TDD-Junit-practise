@@ -4,29 +4,39 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.Test;
 
 import br.com.caelum.leilao.dominio.Avaliador;
 import br.com.caelum.leilao.dominio.Lance;
 import br.com.caelum.leilao.dominio.Leilao;
 import br.com.caelum.leilao.dominio.Usuario;
+import br.com.caelum.leilao.teste.builder.CriarLeilao;
 
 public class AvaliadorTeste {
 
+	private Avaliador avaliador;
+	private Usuario jose;
+	private Usuario maria;
+	private Usuario joao;
+
+	@Before
+	public void setUp() {
+		this.avaliador = new Avaliador();
+		this.jose = new Usuario("José");
+		this.maria = new Usuario("Maria");
+		this.joao = new Usuario("Joao");
+	}
+
 	@Test
-	public void teste() {
-		// cenario: 3 lances em ordem crescente
-		Usuario joao = new Usuario("Joao");
-		Usuario jose = new Usuario("José");
-		Usuario maria = new Usuario("Maria");
+	public void teste() {		
+		Leilao leilao = new CriarLeilao().para("Iphone 7")
+				.registrarLance(maria, 300.0)
+				.registrarLance(joao, 400.0)
+				.registrarLance(jose,500.0)
+				.constroi();
 
-		Leilao leilao = new Leilao("Playstation 3 Novo");
-
-		leilao.propoe(new Lance(maria, 300.0));
-		leilao.propoe(new Lance(joao, 400.0));
-		leilao.propoe(new Lance(jose, 500.0));
-
-		Avaliador avaliador = new Avaliador();
 		avaliador.avalia(leilao);
 
 		double maiorEsperado = 500;
@@ -39,42 +49,37 @@ public class AvaliadorTeste {
 
 	@Test
 	public void testaMediaDeZeroLance() {
-
 		// cenario
 		Usuario ewertom = new Usuario("Ewertom");
 
 		// acao
 		Leilao leilao = new Leilao("Iphone 7");
 
-		Avaliador avaliador = new Avaliador();
 		avaliador.avalia(leilao);
 
 		// validacao
 		assertEquals(0, avaliador.getMediaLance(), 0.0001);
-
 	}
 
 	@Test
 	public void deveEncontrarOsTresMaioresLances() {
-		Usuario joao = new Usuario("Joao");
-		Usuario jose = new Usuario("José");
-		Usuario maria = new Usuario("Maria");
+		Leilao leilao = new CriarLeilao().para("Playstation 3 Novo")
+				.registrarLance(maria, 300.0)
+				.registrarLance(joao, 400.0)
+				.registrarLance(jose, 500.0)
+				.registrarLance(jose, 600.0).constroi();
 
-		Leilao leilao = new Leilao("Playstation 3 Novo");
-
-		leilao.propoe(new Lance(maria, 300.0));
-		leilao.propoe(new Lance(joao, 400.0));
-		leilao.propoe(new Lance(jose, 500.0));
-		leilao.propoe(new Lance(jose, 600.0));
-
-		Avaliador avaliador = new Avaliador();
 		avaliador.avalia(leilao);
 
 		List<Lance> lances = avaliador.getTresMaioresLances();
-
 		assertEquals(3, lances.size());
-		assertEquals(600.0, lances.get(0).getValor(), 0.00001);
-		assertEquals(500.0, lances.get(1).getValor(), 0.00001);
-		assertEquals(400.0, lances.get(2).getValor(), 0.000001);
+		assertEquals(500.0, lances.get(0).getValor(), 0.00001);
+		assertEquals(400.0, lances.get(1).getValor(), 0.00001);
+		assertEquals(300.0, lances.get(2).getValor(), 0.000001);
+	}
+	
+	@AfterClass
+	public static void testandoAfterClass() {
+	  System.out.println("Finalizado!");
 	}
 }
